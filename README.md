@@ -3,12 +3,70 @@
 请完成以下笔试题，可以使用自己擅长的语言来编写，通过 github pull request 提交代码。
 
 1. 编写一个递归版本的 reverse(s) 函数(或方法),以将字符串s倒置。
-
+ public static String reverse(String s) {
+        if (s.length() <= 1) {
+            return s;
+        }
+        return reverse(s.substring(1)) + s.charAt(0);
+    }
 2. 编写程序 expr，以计算从命令行输入的逆波兰表达式的值，其中每个运算符或操作数用一个单独的参数表示。例如，命令
 expr 2 3 4 + *
+ public static int evalRPN(String[] ts) {
+        Stack<Integer> stack = new Stack<>();
+        for (String t : ts) {
+            if ("+-*/".contains(t)) {
+                  Integer a = stack.pop();
+                  Integer b = stack.pop();
+                stack.push(calc(b,a ,t)) ;
+            } else {
+                stack.push(Integer.parseInt(t));
+            }
+        }
+        return stack.pop();
+    }
 
+    public static int  calc(int a, int b, String op) {
+        if (op.equals("+")) return a+b;
+        else if (op.equals("-")) return a-b;
+        else if (op.equals("*")) return a*b;
+        else if (op.equals("/"))return a/b;
+        else return -1;
+    }
 3. 用归并排序将3，1，4，1，5，9，2，6 排序。
+ public int[] sortArray(int[] nums) {
+        final int[] temp = Arrays.copyOf(nums, nums.length);
+        sort(nums, temp, 0, nums.length - 1);
+        return nums;
+    }
 
+    public void sort(int[] nums, int[] temp, int left, int right) {
+        if (left >= right) return;
+        int mid = (left + right) >>> 1;
+        sort(nums, temp, left, mid);
+        sort(nums, temp, mid + 1, right);
+        merge(nums, temp, left, right, mid);
+    }
+
+    public void merge(int[] nums, int[] temp, int left, int right, int mid) {
+        System.arraycopy(nums, left, temp, left, right - left + 1);
+        int i = left;
+        int j = mid + 1;
+        for (int k = left; k <= right; k++) {
+            if (i == mid + 1) {
+                nums[k] = temp[j];
+                j++;
+            } else if (j == right + 1) {
+                nums[k] = temp[i];
+                i++;
+            } else if (temp[i] <= temp[j]) {
+                nums[k] = temp[i];
+                i++;
+            } else {
+                nums[k] = temp[j];
+                j++;
+            }
+        }
+    }
 4. 对下面的 json 字符串 serial 相同的进行去重。
 
 ```javascript
